@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     // Fetch data from the API on page load
-    fetch('https://opentdb.com/api.php?amount=100')
+    fetch('https://opentdb.com/api.php?amount=50')
       .then((response) => response.json())
       .then((json) => {
         // Decode HTML entities in the API response
@@ -100,8 +100,8 @@ function App() {
             ))}
         </select>
       </div>
-      <br />  
-      <table border="1" style={{ width: '100%', textAlign: 'left' }}>
+      <br />
+      <table border="1">
         <thead>
           <tr>
             <th onClick={() => handleSort('category')} style={{ cursor: 'pointer' }}>
