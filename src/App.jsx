@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
 
 // Utility function to decode HTML entities
 const decodeHtmlEntities = (str) => {
-  const textArea = document.createElement('textarea');
+  const textArea = document.createElement("textarea");
   textArea.innerHTML = str;
   return textArea.value;
 };
@@ -11,14 +11,14 @@ const decodeHtmlEntities = (str) => {
 function App() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [sortField, setSortField] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc'); // Track sorting order
-  const [filterField, setFilterField] = useState('');
-  const [filterValue, setFilterValue] = useState('');
+  const [sortField, setSortField] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc"); // Track sorting order
+  const [filterField, setFilterField] = useState("");
+  const [filterValue, setFilterValue] = useState("");
 
   useEffect(() => {
     // Fetch data from the API on page load
-    fetch('https://opentdb.com/api.php?amount=50')
+    fetch("https://opentdb.com/api.php?amount=50")
       .then((response) => response.json())
       .then((json) => {
         // Decode HTML entities in the API response
@@ -34,24 +34,24 @@ function App() {
         setData(decodedResults);
         setFilteredData(decodedResults); // Initialize filtered data
       })
-      .catch((error) => console.error('Error fetching data:', error));
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
   const handleSort = (field) => {
-    const order = sortField === field && sortOrder === 'asc' ? 'desc' : 'asc';
+    const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
     const sortedData = [...filteredData].sort((a, b) => {
-      if (field === 'type') {
+      if (field === "type") {
         const typeOrder = { multiple: 1, boolean: 2 };
-        return order === 'asc'
+        return order === "asc"
           ? typeOrder[a[field]] - typeOrder[b[field]]
           : typeOrder[b[field]] - typeOrder[a[field]];
-      } else if (field === 'difficulty') {
+      } else if (field === "difficulty") {
         const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
-        return order === 'asc'
+        return order === "asc"
           ? difficultyOrder[a[field]] - difficultyOrder[b[field]]
           : difficultyOrder[b[field]] - difficultyOrder[a[field]];
       } else {
-        return order === 'asc'
+        return order === "asc"
           ? a[field].localeCompare(b[field])
           : b[field].localeCompare(a[field]);
       }
@@ -61,9 +61,10 @@ function App() {
     setSortOrder(order);
   };
 
-  const handleFilter = () => {
+  const handleFilter = (value) => {
+    setFilterValue(value);
     const filtered = data.filter((item) =>
-      item[filterField]?.toString().toLowerCase().includes(filterValue.toLowerCase())
+      item[filterField]?.toString().toLowerCase().includes(value.toLowerCase())
     );
     setFilteredData(filtered);
   };
@@ -88,30 +89,43 @@ function App() {
         <select
           id="filterValue"
           value={filterValue}
-          onChange={(e) => setFilterValue(e.target.value)}
+          onChange={(e) => handleFilter(e.target.value)}
           disabled={!filterField} // Disable until a field is selected
         >
           <option value="">Select a value</option>
           {filterField &&
-            [...new Set(data.map((item) => item[filterField]))].map((value, index) => (
-              <option key={index} value={value} onClick={handleFilter}>
-                {value}
-              </option>
-            ))}
+            [...new Set(data.map((item) => item[filterField]))].map(
+              (value, index) => (
+                <option key={index} value={value}>
+                  {value}
+                </option>
+              )
+            )}
         </select>
       </div>
       <br />
       <table border="1">
         <thead>
           <tr>
-            <th onClick={() => handleSort('category')} style={{ cursor: 'pointer' }}>
-              Category {sortField === 'category' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
+            <th onClick={() => handleSort("category")} className="clickable">
+              Category{" "}
+              {sortField === "category"
+                ? sortOrder === "asc"
+                  ? "↑"
+                  : "↓"
+                : ""}
             </th>
-            <th onClick={() => handleSort('type')} style={{ cursor: 'pointer' }}>
-              Type {sortField === 'type' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
+            <th onClick={() => handleSort("type")} className="clickable">
+              Type{" "}
+              {sortField === "type" ? (sortOrder === "asc" ? "↑" : "↓") : ""}
             </th>
-            <th onClick={() => handleSort('difficulty')} style={{ cursor: 'pointer' }}>
-              Difficulty {sortField === 'difficulty' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
+            <th onClick={() => handleSort("difficulty")} className="clickable">
+              Difficulty{" "}
+              {sortField === "difficulty"
+                ? sortOrder === "asc"
+                  ? "↑"
+                  : "↓"
+                : ""}
             </th>
             <th>Question</th>
             <th>Correct Answer</th>
@@ -126,7 +140,7 @@ function App() {
               <td>{item.difficulty}</td>
               <td>{item.question}</td>
               <td>{item.correct_answer}</td>
-              <td>{item.incorrect_answers.join(', ')}</td>
+              <td>{item.incorrect_answers.join(", ")}</td>
             </tr>
           ))}
         </tbody>

@@ -36,16 +36,12 @@ table {
 thead > tr {
   padding: 1rem;
   text-align: center;
-  border: 3px solid;;
+  border: 3px solid;
   border-radius: 5px;
   background-color: #37851f;
   color: #fff;
   font-size: 1.2em;
   font-weight: 500;
-}
-
-thead > tr:hover {
-  background-color: #1e6f8f;
 }
 
 tbody > tr:nth-child(odd) {
@@ -64,7 +60,13 @@ tr {
   font-weight: 500;
 }
 
-th, td {
+th,
+td {
   margin: 0px;
   padding: 0.25em;
+}
+
+th.clickable:hover {
+  cursor: pointer;
+  background-color: #1e6f8f;
 }
