@@ -69,6 +69,10 @@ function App() {
     setFilteredData(filtered);
   };
 
+  const resetFilter = () => {
+    setFilteredData(data);
+  };
+
   return (
     <div className="App">
       <h1>Trivia Questions</h1>
@@ -79,7 +83,10 @@ function App() {
         <select
           id="filterField"
           value={filterField}
-          onChange={(e) => setFilterField(e.target.value)}
+          onChange={(e) => {
+            setFilterField(e.target.value);
+            resetFilter();
+          }}
         >
           <option value="">Select a field</option>
           <option value="type">Type</option>
